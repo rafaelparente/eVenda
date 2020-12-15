@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "5AYFghAOaSMr10+h1IMtCHtV1EwEnC5kaZWNHlm276LX72Dz360lNcJPlVLVN2tvl7z5DZFcfr2DcHIODOXx0A==",
+  "success": true,
+  "projectFilePath": "D:\\Projects\\eVenda\\JsonUtils\\JsonUtils.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Rafael\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

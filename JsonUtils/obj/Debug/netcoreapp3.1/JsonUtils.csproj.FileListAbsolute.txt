@@ -1,0 +1,15 @@
+D:\Projects\eVenda\JsonUtils\obj\Debug\netcoreapp3.1\JsonUtils.csprojAssemblyReference.cache
+D:\Projects\eVenda\JsonUtils\obj\Debug\netcoreapp3.1\JsonUtils.AssemblyInfoInputs.cache
+D:\Projects\eVenda\JsonUtils\obj\Debug\netcoreapp3.1\JsonUtils.AssemblyInfo.cs
+D:\Projects\eVenda\JsonUtils\obj\Debug\netcoreapp3.1\JsonUtils.csproj.CoreCompileInputs.cache
+D:\Projects\eVenda\JsonUtils\bin\Debug\netcoreapp3.1\JsonUtils.exe
+D:\Projects\eVenda\JsonUtils\bin\Debug\netcoreapp3.1\JsonUtils.deps.json
+D:\Projects\eVenda\JsonUtils\bin\Debug\netcoreapp3.1\JsonUtils.runtimeconfig.json
+D:\Projects\eVenda\JsonUtils\bin\Debug\netcoreapp3.1\JsonUtils.runtimeconfig.dev.json
+D:\Projects\eVenda\JsonUtils\bin\Debug\netcoreapp3.1\JsonUtils.dll
+D:\Projects\eVenda\JsonUtils\bin\Debug\netcoreapp3.1\JsonUtils.pdb
+D:\Projects\eVenda\JsonUtils\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+D:\Projects\eVenda\JsonUtils\obj\Debug\netcoreapp3.1\JsonUtils.csproj.CopyComplete
+D:\Projects\eVenda\JsonUtils\obj\Debug\netcoreapp3.1\JsonUtils.dll
+D:\Projects\eVenda\JsonUtils\obj\Debug\netcoreapp3.1\JsonUtils.pdb
+D:\Projects\eVenda\JsonUtils\obj\Debug\netcoreapp3.1\JsonUtils.genruntimeconfig.cache
