@@ -2,16 +2,24 @@
 using System.Threading.Tasks;
 
 using Azure.Messaging.ServiceBus;
+using Microsoft.Extensions.Configuration;
 
 namespace SalesService
 {
     class Program
     {
-        static string connectionString = "<ServiceBusConnectionString>";
-        static string queueName = "eVendas-queue";
+        private static string _connectionString = null;
+        private static string _queueName = null;
 
         static async Task Main()
         {
+            var configuration = new ConfigurationBuilder()
+                .AddUserSecrets<Program>()
+                .Build();
+
+            _connectionString = configuration.GetConnectionString("ServiceBusConnection");
+            _queueName = configuration.GetConnectionString("ServiceBusQueue");
+            
             // receive message from the queue
             await ReceiveMessagesAsync();
         }
@@ -35,10 +43,10 @@ namespace SalesService
 
         static async Task ReceiveMessagesAsync()
         {
-            await using (ServiceBusClient client = new ServiceBusClient(connectionString))
+            await using (ServiceBusClient client = new ServiceBusClient(_connectionString))
             {
                 // create a processor that we can use to process the messages
-                ServiceBusProcessor processor = client.CreateProcessor(queueName, new ServiceBusProcessorOptions());
+                ServiceBusProcessor processor = client.CreateProcessor(_queueName, new ServiceBusProcessorOptions());
 
                 // add handler to process messages
                 processor.ProcessMessageAsync += MessageHandler;

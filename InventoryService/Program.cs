@@ -3,36 +3,44 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Azure.Messaging.ServiceBus;
+using Microsoft.Extensions.Configuration;
 
 namespace InventoryService
 {
     class Program
     {
-        static string connectionString = "<ServiceBusConnectionString>";
-        static string queueName = "eVendas-queue";
+        private static string _connectionString = null;
+        private static string _queueName = null;
 
         static async Task Main()
         {
+            var configuration = new ConfigurationBuilder()
+                .AddUserSecrets<Program>()
+                .Build();
+
+            _connectionString = configuration.GetConnectionString("ServiceBusConnection");
+            _queueName = configuration.GetConnectionString("ServiceBusQueue");
+
             // send a message to the queue
             await SendMessageAsync();
 
             // send a batch of messages to the queue
             await SendMessageBatchAsync();
         }
-
+        
         static async Task SendMessageAsync()
         {
-            await using (ServiceBusClient client = new ServiceBusClient(connectionString))
+            await using (ServiceBusClient client = new ServiceBusClient(_connectionString))
             {
                 // create a Service Bus client 
-                ServiceBusSender sender = client.CreateSender(queueName);
+                ServiceBusSender sender = client.CreateSender(_queueName);
 
                 // create a message that we can send
                 ServiceBusMessage message = new ServiceBusMessage("Hello world!");
 
                 // send the message
                 await sender.SendMessageAsync(message);
-                Console.WriteLine($"Sent a single message to the queue: {queueName}");
+                Console.WriteLine($"Sent a single message to the queue: {_queueName}");
             }
         }
 
@@ -49,10 +57,10 @@ namespace InventoryService
         static async Task SendMessageBatchAsync()
         {
             // create a Service Bus client 
-            await using (ServiceBusClient client = new ServiceBusClient(connectionString))
+            await using (ServiceBusClient client = new ServiceBusClient(_connectionString))
             {
                 // create a sender for the queue 
-                ServiceBusSender sender = client.CreateSender(queueName);
+                ServiceBusSender sender = client.CreateSender(_queueName);
 
                 // get the messages to be sent to the Service Bus queue
                 Queue<ServiceBusMessage> messages = CreateMessages();
@@ -91,7 +99,7 @@ namespace InventoryService
                     // if there are any remaining messages in the .NET queue, the while loop repeats 
                 }
 
-                Console.WriteLine($"Sent a batch of {messageCount} messages to the topic: {queueName}");
+                Console.WriteLine($"Sent a batch of {messageCount} messages to the topic: {_queueName}");
             }
         }
     }
