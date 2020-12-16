@@ -7,9 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryService", "Invento
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SalesService", "SalesService\SalesService.csproj", "{03D54EDF-5CAE-492E-934C-64D6B92A60B2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5B06890E-009B-423E-B339-D4C45A757A80}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utils", "Utils", "{013279CD-6FE7-4FD1-9947-F210A47668C5}"
 	ProjectSection(SolutionItems) = preProject
-		JsonUtils\JsonUtils.cs = JsonUtils\JsonUtils.cs
+		Utils\ConfigUtils.cs = Utils\ConfigUtils.cs
+		Utils\JsonUtils.cs = Utils\JsonUtils.cs
 	EndProjectSection
 EndProject
 Global

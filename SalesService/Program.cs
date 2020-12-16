@@ -8,17 +8,31 @@ namespace SalesService
 {
     class Program
     {
+        private static IConfigurationRoot Configuration { get; set; }
+
         private static string _connectionString = null;
         private static string _queueName = null;
 
         static async Task Main()
         {
-            var configuration = new ConfigurationBuilder()
-                .AddUserSecrets<Program>()
-                .Build();
+            var devEnvironmentVariable = Environment.GetEnvironmentVariable("NETCORE_ENVIRONMENT");
 
-            _connectionString = configuration.GetConnectionString("ServiceBusConnection");
-            _queueName = configuration.GetConnectionString("ServiceBusQueue");
+            var isDevelopment = string.IsNullOrEmpty(devEnvironmentVariable) ||
+                                devEnvironmentVariable.ToLower() == "development";
+
+            var builder = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", true, true)
+                .AddEnvironmentVariables();
+
+            if (isDevelopment)
+            {
+                builder.AddUserSecrets<Program>();
+            }
+            
+            Configuration = builder.Build();
+
+            _connectionString = Configuration.GetConnectionString("ServiceBusConnection");
+            _queueName = Configuration.GetConnectionString("ServiceBusQueue");
             
             // receive message from the queue
             await ReceiveMessagesAsync();
