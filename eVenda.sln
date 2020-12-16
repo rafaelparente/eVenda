@@ -4,14 +4,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryService", "InventoryService\InventoryService.csproj", "{7127E49D-F90B-428E-9781-5B84775821F7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EEEFA86F-CE00-4152-9F03-72807C8EBD38} = {EEEFA86F-CE00-4152-9F03-72807C8EBD38}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SalesService", "SalesService\SalesService.csproj", "{03D54EDF-5CAE-492E-934C-64D6B92A60B2}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utils", "Utils", "{013279CD-6FE7-4FD1-9947-F210A47668C5}"
-	ProjectSection(SolutionItems) = preProject
-		Utils\ConfigUtils.cs = Utils\ConfigUtils.cs
-		Utils\JsonUtils.cs = Utils\JsonUtils.cs
+	ProjectSection(ProjectDependencies) = postProject
+		{EEEFA86F-CE00-4152-9F03-72807C8EBD38} = {EEEFA86F-CE00-4152-9F03-72807C8EBD38}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "Utils\Utils.csproj", "{EEEFA86F-CE00-4152-9F03-72807C8EBD38}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{03D54EDF-5CAE-492E-934C-64D6B92A60B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03D54EDF-5CAE-492E-934C-64D6B92A60B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03D54EDF-5CAE-492E-934C-64D6B92A60B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEEFA86F-CE00-4152-9F03-72807C8EBD38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEEFA86F-CE00-4152-9F03-72807C8EBD38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEEFA86F-CE00-4152-9F03-72807C8EBD38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEEFA86F-CE00-4152-9F03-72807C8EBD38}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

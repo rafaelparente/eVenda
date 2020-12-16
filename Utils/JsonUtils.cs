@@ -1,4 +1,5 @@
 ﻿using System.Text;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -30,8 +31,8 @@ namespace Utils
         {
             if (source == null)
                 return null;
-            var instring = JsonConvert.SerializeObject(source, Formatting.Indented, JsonSettings);
-            return Utf8NoBom.GetBytes(instring);
+            var inString = JsonConvert.SerializeObject(source, Formatting.Indented, JsonSettings);
+            return Utf8NoBom.GetBytes(inString);
         }
 
         /// <summary>

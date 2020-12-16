@@ -1,10 +1,12 @@
-using System;
+﻿using System;
+
+using Microsoft.Extensions.Configuration;
 
 namespace Utils
 {
-    public static class ConfigUtils
+    public class ConfigUtils
     {
-        public static IConfiguration Configuration { get; }
+        private static IConfiguration Configuration { get; }
 
         static ConfigUtils()
         {
@@ -19,10 +21,20 @@ namespace Utils
 
             if (isDevelopment)
             {
-                builder.AddUserSecrets<Program>();
+                builder.AddUserSecrets<ConfigUtils>();
             }
 
             Configuration = builder.Build();
+        }
+
+        public static string GetConnectionString()
+        {
+            return Configuration.GetConnectionString("ServiceBusConnection");
+        }
+
+        public static string GetQueueName()
+        {
+            return Configuration.GetConnectionString("ServiceBusQueue");
         }
     }
 }
