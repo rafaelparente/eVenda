@@ -16,10 +16,42 @@ namespace InventoryService
         static async Task Main()
         {
             // send a message to the queue
-            await SendMessageAsync();
+            // await SendMessageAsync();
 
             // send a batch of messages to the queue
-            await SendMessageBatchAsync();
+            // await SendMessageBatchAsync();
+
+            await SendObjectAsync();
+        }
+
+        internal class PagamentoFeito
+        {
+            public string NumeroCartao { get; set; }
+            public decimal Valor { get; set; }
+
+            public override string ToString()
+            {
+                return $"Numero Cartao{NumeroCartao}, Valor{Valor}";
+
+            }
+        }
+
+        static async Task SendObjectAsync()
+        {
+            var pagamentofeito = new PagamentoFeito { NumeroCartao = "123456789012", Valor = 1502.32M };
+
+            await using var client = new ServiceBusClient(ConnectionString);
+            // create a Service Bus client 
+            ServiceBusSender sender = client.CreateSender(QueueName);
+
+            var message = new ServiceBusMessage(pagamentofeito.ToJsonBytes())
+            {
+                ContentType = "application/json",
+                CorrelationId = Guid.NewGuid().ToString()
+            };
+
+            // send the message
+            await sender.SendMessageAsync(message);
         }
         
         static async Task SendMessageAsync()
