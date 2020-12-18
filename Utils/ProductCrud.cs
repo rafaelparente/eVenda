@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using Utils;
 
-namespace SalesService
+namespace Utils
 {
     public class ProductCrud : ICrud<Product, int>
     {
-        private readonly List<Product> _database = new();
+        private readonly List<Product> _database = new List<Product>();
 
         public bool Create(Product obj)
         {
@@ -15,9 +14,14 @@ namespace SalesService
             return true;
         }
 
-        public Product Read(int id)
+        public Product Get(int id)
         {
             return id >= _database.Count ? null : _database[id];
+        }
+
+        public IReadOnlyCollection<Product> GetAll()
+        {
+            return _database.AsReadOnly();
         }
 
         public bool Update(Product obj, int id)

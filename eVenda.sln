@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SalesService", "SalesServic
 		{EEEFA86F-CE00-4152-9F03-72807C8EBD38} = {EEEFA86F-CE00-4152-9F03-72807C8EBD38}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "Utils\Utils.csproj", "{EEEFA86F-CE00-4152-9F03-72807C8EBD38}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utils", "Utils\Utils.csproj", "{EEEFA86F-CE00-4152-9F03-72807C8EBD38}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

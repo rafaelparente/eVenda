@@ -1,4 +1,4 @@
-﻿namespace InventoryService
+﻿namespace Utils
 {
     public class Product
     {

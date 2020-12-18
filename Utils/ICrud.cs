@@ -1,10 +1,14 @@
-﻿namespace Utils
+﻿using System.Collections.Generic;
+
+namespace Utils
 {
     public interface ICrud<T, I>
     {
         bool Create(T obj);
 
-        T Read(I id);
+        T Get(I id);
+
+        IReadOnlyCollection<T> GetAll();
 
         bool Update(T obj, I id);
 
