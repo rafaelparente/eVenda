@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Utils
 {
@@ -8,9 +9,11 @@ namespace Utils
 
         T Get(I id);
 
-        IReadOnlyCollection<T> GetAll();
+        T Get(Func<Product, bool> filter);
 
-        bool Update(T obj, I id);
+        IReadOnlyCollection<T> GetAll(Func<Product, bool> filter);
+
+        bool Update(T obj);
 
         bool Delete(I id);
 

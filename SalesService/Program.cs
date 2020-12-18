@@ -7,6 +7,29 @@ using Utils;
 
 namespace SalesService
 {
+    public static class ProductStringify
+    {
+        public static string Stringify(this ProductEvent productEvent)
+        {
+            var productString = "";
+            switch (productEvent.EventType)
+            {
+                case ProductEventType.Created:
+                    productString += "[PRODUTO CRIADO]";
+                    break;
+                case ProductEventType.Edited:
+                    productString += "[PRODUTO EDITADO]";
+                    break;
+                default:
+                    productString += "[?]";
+                    break;
+            }
+            productString += "\n" + productEvent.Product.ToString();
+
+            return productString;
+        }
+    }
+
     class Program
     {
         private static readonly ProductCrud ProductCrud = new();
@@ -46,10 +69,10 @@ namespace SalesService
                 return;
             }
 
-            if (_isDisplayingList)
+            if (_isDisplayingList && productEvent.Product.Quantity > 0)
             {
                 Console.WriteLine();
-                Console.WriteLine(productEvent.Product.ToString());
+                Console.WriteLine(productEvent.Stringify());
                 Console.WriteLine();
                 Console.WriteLine("Pressione qualquer tecla para voltar ao menu.");
             }
@@ -77,10 +100,34 @@ namespace SalesService
                 switch (Console.ReadKey().Key)
                 {
                     case (ConsoleKey.D1):
+                        Console.WriteLine();
+                        Console.WriteLine("\nNome ou código do produto: ");
+                        var codeOrName = Console.ReadLine();
+                        var sellingProduct = ProductCrud.Get(p => p.Name == codeOrName || p.Code == codeOrName);
+                        if (sellingProduct == null)
+                        {
+                            Console.WriteLine("Produto não foi encontrado.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Quantidade a ser vendida (máx.: {sellingProduct.Quantity}): ");
+                            var sellingQuantity = Convert.ToInt32(Console.ReadLine());
+                            if (sellingQuantity > sellingProduct.Quantity)
+                            {
+                                Console.WriteLine("Erro: quantidade acima do disponível.");
+                            }
+                            else
+                            {
+                                sellingProduct.Quantity -= sellingQuantity;
+                                ProductCrud.Update(sellingProduct);
+                                var soldEvent = new ProductEvent(ProductEventType.Sold, sellingProduct);
+                                await ServiceBusUtils.SendObjectAsync(soldEvent);
+                            }
+                        }
                         break;
                     case (ConsoleKey.D2):
                         Console.WriteLine();
-                        foreach (var product in ProductCrud.GetAll())
+                        foreach (var product in ProductCrud.GetAll(p => p.Quantity > 0))
                         {
                             Console.WriteLine();
                             Console.WriteLine(product.ToString());

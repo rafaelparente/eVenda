@@ -2,7 +2,9 @@
 {
     public class Product
     {
-        private Product() { }
+        private Product()
+        {
+        }
 
         public Product(string code, string name, double price = 0.0, int quantity = 0)
         {
@@ -13,12 +15,13 @@
         }
 
         public int Id { get; set; }
-        
+
         public string Code { get; set; }
-        
+
         public string Name { get; set; }
 
         private double _price;
+
         public double Price
         {
             get => _price;
@@ -48,7 +51,10 @@
 
         public override string ToString()
         {
-            return $"Há {Quantity} unidades do produto {Name} - {Code}, cujo preço é de R$ {Price}";
+            return $"Código: {Code}" +
+                   $"\nNome: {Name}" +
+                   $"\nPreço: {Price}" +
+                   $"\nQuantidade: {Quantity}";
         }
     }
 }

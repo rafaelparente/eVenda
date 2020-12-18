@@ -7,6 +7,27 @@ using Utils;
 
 namespace InventoryService
 {
+    public static class ProductStringify
+    {
+        public static string Stringify(this ProductEvent productEvent)
+        {
+            var productString = "";
+            switch (productEvent.EventType)
+            {
+                case ProductEventType.Sold:
+                    productString += "[PRODUTO VENDIDO]";
+                    break;
+                default:
+                    productString += "[?]";
+                    break;
+            }
+
+            productString += "\n" + productEvent.Product.ToString();
+
+            return productString;
+        }
+    }
+    
     class Program
     {
         private static readonly ProductCrud ProductCrud = new();
@@ -40,7 +61,7 @@ namespace InventoryService
         private static async Task ObjectHandler(ProcessMessageEventArgs args)
         {
             var productEvent = args.Message.Body.ToArray().ParseJson<ProductEvent>();
-            if (productEvent.EventType != ProductEventType.Sold || !ProductCrud.Create(productEvent.Product))
+            if (productEvent.EventType != ProductEventType.Sold || !ProductCrud.Update(productEvent.Product))
             {
                 await args.AbandonMessageAsync(args.Message);
                 return;
@@ -49,7 +70,7 @@ namespace InventoryService
             if (_isDisplayingList)
             {
                 Console.WriteLine();
-                Console.WriteLine(productEvent.Product.ToString());
+                Console.WriteLine(productEvent.Stringify());
                 Console.WriteLine();
                 Console.WriteLine("Pressione qualquer tecla para voltar ao menu.");
             }
@@ -79,15 +100,26 @@ namespace InventoryService
                 {
                     case (ConsoleKey.D1):
                         Console.WriteLine();
-                        var productEvent = MakeNewProductEvent();
-                        if (productEvent != null)
+                        var createdEvent = MakeNewProductEvent();
+                        if (createdEvent != null)
                         {
-                            await ServiceBusUtils.SendObjectAsync(productEvent);
+                            await ServiceBusUtils.SendObjectAsync(createdEvent);
                         }
                         break;
                     case (ConsoleKey.D2):
                         break;
                     case (ConsoleKey.D3):
+                        Console.WriteLine();
+                        foreach (var product in ProductCrud.GetAll(p => p.Quantity > 0))
+                        {
+                            Console.WriteLine();
+                            Console.WriteLine(product.ToString());
+                        }
+                        Console.WriteLine();
+                        Console.WriteLine("Pressione qualquer tecla para voltar ao menu.");
+                        _isDisplayingList = true;
+                        Console.ReadKey();
+                        _isDisplayingList = false;
                         break;
                     default:
                         return;

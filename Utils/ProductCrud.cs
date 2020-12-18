@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Utils
 {
@@ -19,15 +20,27 @@ namespace Utils
             return id >= _database.Count ? null : _database[id];
         }
 
-        public IReadOnlyCollection<Product> GetAll()
+        public Product Get(Func<Product, bool> filter)
         {
-            return _database.AsReadOnly();
+            return _database.Find(p => filter(p));
         }
 
-        public bool Update(Product obj, int id)
+        public IReadOnlyCollection<Product> GetAll(Func<Product, bool> filter = null)
         {
-            if (id >= _database.Count || !IsValid(obj)) return false;
-            _database[id] = obj;
+            if (filter == null)
+            {
+                return _database.AsReadOnly();
+            }
+            else
+            {
+                return _database.FindAll(p => filter(p)).AsReadOnly();
+            }
+        }
+
+        public bool Update(Product obj)
+        {
+            if (!obj.IsValid()) return false;
+            _database[obj.Id] = obj;
             return true;
         }
 
@@ -43,7 +56,7 @@ namespace Utils
 
         private bool IsValid(Product obj)
         {
-            return obj.IsValid() || !_database.Exists(p => p.Code == obj.Code || p.Name == obj.Name);
+            return obj.IsValid() && !_database.Exists(p => p.Code == obj.Code || p.Name == obj.Name);
         }
     }
 }
