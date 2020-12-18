@@ -63,10 +63,25 @@ namespace SalesService
         private static async Task ObjectHandler(ProcessMessageEventArgs args)
         {
             var productEvent = args.Message.Body.ToArray().ParseJson<ProductEvent>();
-            if (productEvent.EventType != ProductEventType.Created || !ProductCrud.Create(productEvent.Product))
+            switch (productEvent.EventType)
             {
-                await args.AbandonMessageAsync(args.Message);
-                return;
+                case ProductEventType.Created:
+                    if (!ProductCrud.Create(productEvent.Product))
+                    {
+                        await args.AbandonMessageAsync(args.Message);
+                        return;
+                    }
+                    break;
+                case ProductEventType.Edited:
+                    if (!ProductCrud.Update(productEvent.Product))
+                    {
+                        await args.AbandonMessageAsync(args.Message);
+                        return;
+                    }
+                    break;
+                default:
+                    await args.AbandonMessageAsync(args.Message);
+                    return;
             }
 
             if (_isDisplayingList && productEvent.Product.Quantity > 0)
@@ -99,7 +114,7 @@ namespace SalesService
 
                 switch (Console.ReadKey().Key)
                 {
-                    case (ConsoleKey.D1):
+                    case ConsoleKey.D1:
                         Console.WriteLine();
                         Console.WriteLine("\nNome ou código do produto: ");
                         var codeOrName = Console.ReadLine();
@@ -125,7 +140,7 @@ namespace SalesService
                             }
                         }
                         break;
-                    case (ConsoleKey.D2):
+                    case ConsoleKey.D2:
                         Console.WriteLine();
                         foreach (var product in ProductCrud.GetAll(p => p.Quantity > 0))
                         {

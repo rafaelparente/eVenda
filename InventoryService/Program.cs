@@ -98,7 +98,7 @@ namespace InventoryService
 
                 switch (Console.ReadKey().Key)
                 {
-                    case (ConsoleKey.D1):
+                    case ConsoleKey.D1:
                         Console.WriteLine();
                         var createdEvent = MakeNewProductEvent();
                         if (createdEvent != null)
@@ -106,9 +106,50 @@ namespace InventoryService
                             await ServiceBusUtils.SendObjectAsync(createdEvent);
                         }
                         break;
-                    case (ConsoleKey.D2):
+                    case ConsoleKey.D2:
+                        Console.WriteLine();
+                        Console.WriteLine("\nNome ou código do produto: ");
+                        var codeOrName = Console.ReadLine();
+                        var editProduct = ProductCrud.Get(p => p.Name == codeOrName || p.Code == codeOrName);
+                        if (editProduct == null)
+                        {
+                            Console.WriteLine("Produto não foi encontrado.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("\n1: Editar código");
+                            Console.WriteLine("2: Editar nome");
+                            Console.WriteLine("3: Editar preço");
+                            Console.WriteLine("4: Editar quantidade");
+                            switch (Console.ReadKey().Key)
+                            {
+                                case ConsoleKey.D1:
+                                    Console.Write("\n\nNovo código: ");
+                                    editProduct.Code = Console.ReadLine();
+                                    break;
+                                case ConsoleKey.D2:
+                                    Console.Write("\n\nNovo nome: ");
+                                    editProduct.Name = Console.ReadLine();
+                                    break;
+                                case ConsoleKey.D3:
+                                    Console.Write("\n\nNovo preço: ");
+                                    editProduct.Price = Convert.ToDouble(Console.ReadLine());
+                                    break;
+                                case ConsoleKey.D4:
+                                    Console.Write("\n\nNova quantidade: ");
+                                    editProduct.Quantity = Convert.ToInt32(Console.ReadLine());
+                                    break;
+                                default:
+                                    break;
+                            }
+                            if (ProductCrud.Update(editProduct))
+                            {
+                                var editEvent = new ProductEvent(ProductEventType.Edited, editProduct);
+                                await ServiceBusUtils.SendObjectAsync(editEvent);
+                            }
+                        }
                         break;
-                    case (ConsoleKey.D3):
+                    case ConsoleKey.D3:
                         Console.WriteLine();
                         foreach (var product in ProductCrud.GetAll(p => p.Quantity > 0))
                         {
