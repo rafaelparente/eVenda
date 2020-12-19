@@ -1,22 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Utils
 {
     public interface ICrud<T, I>
     {
-        bool Create(T obj);
+        bool DoCreate(T obj);
 
-        T Get(I id);
+        T DoGet(I id);
 
-        T Get(Func<Product, bool> filter);
+        T DoGet(Func<Product, bool> filter);
 
-        IReadOnlyCollection<T> GetAll(Func<Product, bool> filter);
+        T[] DoGetAll(Func<Product, bool> filter);
 
-        bool Update(T obj);
+        bool DoUpdate(T obj);
 
-        bool Delete(I id);
+        bool DoDelete(I id);
 
-        bool Delete(T obj);
+        bool DoDelete(T obj);
     }
 }

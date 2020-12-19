@@ -2,9 +2,7 @@
 {
     public class Product
     {
-        private Product()
-        {
-        }
+        private Product() { }
 
         public Product(string code, string name, double price = 0.0, int quantity = 0)
         {

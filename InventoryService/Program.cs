@@ -61,7 +61,7 @@ namespace InventoryService
         private static async Task ObjectHandler(ProcessMessageEventArgs args)
         {
             var productEvent = args.Message.Body.ToArray().ParseJson<ProductEvent>();
-            if (productEvent.EventType != ProductEventType.Sold || !ProductCrud.Update(productEvent.Product))
+            if (productEvent.EventType != ProductEventType.Sold || !ProductCrud.DoUpdate(productEvent.Product))
             {
                 await args.AbandonMessageAsync(args.Message);
                 return;
@@ -110,7 +110,7 @@ namespace InventoryService
                         Console.WriteLine();
                         Console.WriteLine("\nNome ou código do produto: ");
                         var codeOrName = Console.ReadLine();
-                        var editProduct = ProductCrud.Get(p => p.Name == codeOrName || p.Code == codeOrName);
+                        var editProduct = ProductCrud.DoGet(p => p.Name == codeOrName || p.Code == codeOrName);
                         if (editProduct == null)
                         {
                             Console.WriteLine("Produto não foi encontrado.");
@@ -142,7 +142,7 @@ namespace InventoryService
                                 default:
                                     break;
                             }
-                            if (ProductCrud.Update(editProduct))
+                            if (ProductCrud.DoUpdate(editProduct))
                             {
                                 var editEvent = new ProductEvent(ProductEventType.Edited, editProduct);
                                 await ServiceBusUtils.SendObjectAsync(editEvent);
@@ -151,7 +151,7 @@ namespace InventoryService
                         break;
                     case ConsoleKey.D3:
                         Console.WriteLine();
-                        foreach (var product in ProductCrud.GetAll(p => p.Quantity > 0))
+                        foreach (var product in ProductCrud.DoGetAll(p => p.Quantity > 0))
                         {
                             Console.WriteLine();
                             Console.WriteLine(product.ToString());
@@ -181,7 +181,7 @@ namespace InventoryService
             var quantity = Convert.ToInt32(Console.ReadLine());
             
             var product = new Product(code, name, price, quantity);
-            return !ProductCrud.Create(product) ? null : new ProductEvent(ProductEventType.Created, product);
+            return !ProductCrud.DoCreate(product) ? null : new ProductEvent(ProductEventType.Created, product);
         }
     }
 }

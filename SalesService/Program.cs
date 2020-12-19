@@ -66,14 +66,14 @@ namespace SalesService
             switch (productEvent.EventType)
             {
                 case ProductEventType.Created:
-                    if (!ProductCrud.Create(productEvent.Product))
+                    if (!ProductCrud.DoCreate(productEvent.Product))
                     {
                         await args.AbandonMessageAsync(args.Message);
                         return;
                     }
                     break;
                 case ProductEventType.Edited:
-                    if (!ProductCrud.Update(productEvent.Product))
+                    if (!ProductCrud.DoUpdate(productEvent.Product))
                     {
                         await args.AbandonMessageAsync(args.Message);
                         return;
@@ -118,7 +118,7 @@ namespace SalesService
                         Console.WriteLine();
                         Console.WriteLine("\nNome ou código do produto: ");
                         var codeOrName = Console.ReadLine();
-                        var sellingProduct = ProductCrud.Get(p => p.Name == codeOrName || p.Code == codeOrName);
+                        var sellingProduct = ProductCrud.DoGet(p => p.Name == codeOrName || p.Code == codeOrName);
                         if (sellingProduct == null)
                         {
                             Console.WriteLine("Produto não foi encontrado.");
@@ -134,7 +134,7 @@ namespace SalesService
                             else
                             {
                                 sellingProduct.Quantity -= sellingQuantity;
-                                ProductCrud.Update(sellingProduct);
+                                ProductCrud.DoUpdate(sellingProduct);
                                 var soldEvent = new ProductEvent(ProductEventType.Sold, sellingProduct);
                                 await ServiceBusUtils.SendObjectAsync(soldEvent);
                             }
@@ -142,7 +142,7 @@ namespace SalesService
                         break;
                     case ConsoleKey.D2:
                         Console.WriteLine();
-                        foreach (var product in ProductCrud.GetAll(p => p.Quantity > 0))
+                        foreach (var product in ProductCrud.DoGetAll(p => p.Quantity > 0))
                         {
                             Console.WriteLine();
                             Console.WriteLine(product.ToString());
